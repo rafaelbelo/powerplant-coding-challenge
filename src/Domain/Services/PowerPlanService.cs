@@ -10,13 +10,13 @@ namespace PowerCalculator.Domain.Services
             List<PowerPlant> plantList = CreatePowerPlantDomainListOrderedByCost(plan);
 
             var surplusLoad = plan.Load;
-            for (int i = 0; i < plantList.Count - 1 || surplusLoad == 0d; i++)
+            for (int i = 0; i < plantList.Count && surplusLoad > 0d; i++)
             {
                 if (surplusLoad < plantList[i].Pmin)
                 {
                     var amountNeededToReachLastPlantPmin = plantList[i].Pmin - surplusLoad;
 
-                    for (int j = i - 1; j == 0 || amountNeededToReachLastPlantPmin == 0d; j--)
+                    for (int j = i - 1; j == 0 && amountNeededToReachLastPlantPmin > 0d; j--)
                     {
                         var (subtracted, excess) = plantList[j].SubtractMwhToGenerateForPlan(amountNeededToReachLastPlantPmin);
                         surplusLoad += subtracted;
@@ -30,7 +30,9 @@ namespace PowerCalculator.Domain.Services
                 }
                 surplusLoad = plantList[i].AddMwhToGenerateForPlan(surplusLoad);
             }
-            return plantList.OrderBy(p => p.MwhToGenerateForPlan).ToList();
+            return plantList;
+            //return (plantList.Where(p => p.MwhAbleToGenerate > 0d).OrderBy(p => p.CostPerMwh)
+            //    .Concat(plantList.Where(p => p.MwhAbleToGenerate == 0d).OrderBy(p => p.CostPerMwh))).ToList();
         }
 
         private List<PowerPlant> CreatePowerPlantDomainListOrderedByCost(ProductionPlanDto plan)
@@ -40,12 +42,10 @@ namespace PowerCalculator.Domain.Services
             foreach (var plant in plan.PowerPlants)
             {
                 PowerPlant domainPlant = new(plant.Name, plant.Type, plant.Efficiency, plant.PMin, plant.PMax, plan.Fuels);
-                //if (domainPlant.MwhAbleToGenerate > 0)
-                //{
-                    plantList.Add(domainPlant);
-                //}
+                plantList.Add(domainPlant);
             }
-            return plantList.OrderBy(p => p.CostPerMwh).ToList();
+            return (plantList.Where(p => p.MwhAbleToGenerate > 0d).OrderBy(p => p.CostPerMwh)
+                .Concat(plantList.Where(p => p.MwhAbleToGenerate == 0d).OrderBy(p => p.CostPerMwh))).ToList();
         }
     }
 }

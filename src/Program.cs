@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Mvc;
 using PowerCalculator.Domain.Services;
 using PowerCalculator.Dto;
 
@@ -8,6 +9,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddScoped<IPowerPlanService, PowerPlanService>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -17,21 +20,25 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.MapPost("/productionplan", (ProductionPlanDto source) =>
+app.MapPost("/productionplan", ([FromBody] ProductionPlanDto source, IPowerPlanService service) =>
 {
-    return (new Calculate()).Get(source);
+    return (new Calculation(service)).Execute(source);
 })
 .WithName("ProductionPlan");
 
 app.Run();
 
-internal class Calculate
+internal class Calculation
 {
-    internal List<PowerPlantGenerationResponseDto> Get(ProductionPlanDto plan)
+    private readonly IPowerPlanService _powerPlanService;
+    public Calculation(IPowerPlanService service)
+    {
+        _powerPlanService = service;
+    }
+    internal List<PowerPlantGenerationResponseDto> Execute(ProductionPlanDto plan)
     {
         var powerPlantGenerationResponse = new List<PowerPlantGenerationResponseDto>();
-        IPowerPlanService powerPlanService = new PowerPlanService();
-        var domainPowerPlantList = powerPlanService.CreateForecastLoadProfile(plan);
+        var domainPowerPlantList = _powerPlanService.CreateForecastLoadProfile(plan);
         foreach (var plant in domainPowerPlantList)
         {
             powerPlantGenerationResponse.Add(new(plant.Name, Math.Round(plant.MwhToGenerateForPlan, 1)));

@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31919.166
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PowerCalculator", "src\PowerCalculator.csproj", "{6B77B51A-1B55-457B-9E2A-96B1A01E1A3E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PowerCalculator", "src\PowerCalculator.csproj", "{6B77B51A-1B55-457B-9E2A-96B1A01E1A3E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PowerCalculatorTests", "PowerCalculatorTests\PowerCalculatorTests.csproj", "{3F046C20-7051-4193-A37E-35F66618805D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{6B77B51A-1B55-457B-9E2A-96B1A01E1A3E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6B77B51A-1B55-457B-9E2A-96B1A01E1A3E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6B77B51A-1B55-457B-9E2A-96B1A01E1A3E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3F046C20-7051-4193-A37E-35F66618805D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3F046C20-7051-4193-A37E-35F66618805D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3F046C20-7051-4193-A37E-35F66618805D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3F046C20-7051-4193-A37E-35F66618805D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
