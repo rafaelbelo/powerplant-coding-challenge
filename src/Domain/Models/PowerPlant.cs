@@ -20,7 +20,7 @@ namespace PowerCalculator.Domain.Models
             Pmin = pmin;
             Pmax = pmax;
 
-            CalculateMetricsBasedOnFuel(fuelCostDto);            
+            CalculateMetricsBasedOnFuel(fuelCostDto);
         }
 
         public string Name { get; private set; }
@@ -29,7 +29,34 @@ namespace PowerCalculator.Domain.Models
         public double Pmin { get; private set; }
         public double Pmax { get; private set; }
         public double CostPerMwh { get; private set; }
-        public double PowerAbleToGenerate { get; private set; }
+        public double MwhAbleToGenerate { get; private set; }
+        public double MwhToGenerateForPlan { get; private set; }
+
+        public double GetMwhThatCanBeSubtracted() => MwhToGenerateForPlan - Pmin;
+        public double AddMwhToGenerateForPlan(double mhwToAdd)
+        {
+            MwhToGenerateForPlan += mhwToAdd;
+            if (MwhToGenerateForPlan > MwhAbleToGenerate)
+            {
+                var surplus = MwhToGenerateForPlan - MwhAbleToGenerate;
+                MwhToGenerateForPlan = MwhAbleToGenerate;
+                return surplus;
+            }
+            return 0d; ;
+        }
+
+        public (double subtracted, double excess) SubtractMwhToGenerateForPlan(double mhwToSubtract)
+        {
+            MwhToGenerateForPlan -= mhwToSubtract;
+            if (MwhToGenerateForPlan < Pmin)
+            {
+                var excess = Pmin - MwhToGenerateForPlan;
+                var subtracted = mhwToSubtract - excess;
+                MwhToGenerateForPlan = Pmin;
+                return (subtracted, excess);
+            }
+            return (mhwToSubtract, 0d);
+        }
 
         // Relation to the merit order: the lower the cost, the higher priority
         private void CalculateMetricsBasedOnFuel(FuelCostDto fuelCostDto)
@@ -38,16 +65,16 @@ namespace PowerCalculator.Domain.Models
             if (FuelType == FuelType.Wind)
             {
                 CostPerMwh = 0;
-                PowerAbleToGenerate = (fuelCostDto.WindEfficiency / 100) * Pmax;
+                MwhAbleToGenerate = (fuelCostDto.WindEfficiency / 100) * Pmax;
             }
             else
             {
-                PowerAbleToGenerate = Pmax;
+                MwhAbleToGenerate = Pmax;
 
                 if (FuelType == FuelType.Kerosine)
                 {
                     CostPerMwh = fuelCostDto.KersosineCost / Efficiency;
-             
+
                 }
                 else if (FuelType == FuelType.Gas)
                 {

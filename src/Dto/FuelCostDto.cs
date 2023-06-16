@@ -15,8 +15,5 @@ namespace PowerCalculator.Dto
 
         [JsonProperty(PropertyName = @"wind(%)")]
         public double WindEfficiency { get; set; }
-
-        [JsonProperty(PropertyName = @"co2(ton/MWh)")]
-        public double CO2TonPerMw { get; set; }
     }
 }

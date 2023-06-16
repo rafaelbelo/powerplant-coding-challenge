@@ -1,3 +1,4 @@
+using PowerCalculator.Domain.Services;
 using PowerCalculator.Dto;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,13 +17,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-var summaries = new[]
+app.MapPost("/productionplan", (ProductionPlanDto source) =>
 {
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
-
-app.MapPost("/productionplan", async (ProductionPlanDto source) =>
-{    
     return (new Calculate()).Get(source);
 })
 .WithName("ProductionPlan");
@@ -30,9 +26,16 @@ app.MapPost("/productionplan", async (ProductionPlanDto source) =>
 app.Run();
 
 internal class Calculate
-{    internal object Get(ProductionPlanDto plan)
+{
+    internal List<PowerPlantGenerationResponseDto> Get(ProductionPlanDto plan)
     {
-        
-
+        var powerPlantGenerationResponse = new List<PowerPlantGenerationResponseDto>();
+        IPowerPlanService powerPlanService = new PowerPlanService();
+        var domainPowerPlantList = powerPlanService.CreateForecastLoadProfile(plan);
+        foreach (var plant in domainPowerPlantList)
+        {
+            powerPlantGenerationResponse.Add(new(plant.Name, Math.Round(plant.MwhToGenerateForPlan, 1)));
+        }
+        return powerPlantGenerationResponse;
     }
 }

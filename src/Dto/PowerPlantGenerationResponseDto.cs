@@ -12,7 +12,6 @@ namespace PowerCalculator.Dto
 
         public string Name { get; set; }
 
-        // Should be round to .1
         [JsonProperty(PropertyName = "p")]
         public double Power { get; set; }
     }

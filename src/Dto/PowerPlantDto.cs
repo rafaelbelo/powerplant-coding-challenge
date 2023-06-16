@@ -2,13 +2,13 @@
 {
     public class PowerPlantDto
     {
-        public PowerPlantDto(string name, string type, double efficiency, double pMin, double pMax)
+        public PowerPlantDto(string name, string type, double efficiency, double pmin, double pmax)
         {
             Name = name;
             Type = type;
             Efficiency = efficiency;
-            PMin = pMin;
-            PMax = pMax;
+            PMin = pmin;
+            PMax = pmax;
         }
 
         public string Name { get; set; }

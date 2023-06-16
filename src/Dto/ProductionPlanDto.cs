@@ -2,14 +2,14 @@
 {
     public class ProductionPlanDto
     {
-        public ProductionPlanDto(int load, FuelCostDto fuels, List<PowerPlantDto> powerPlants)
+        public ProductionPlanDto(double load, FuelCostDto fuels, List<PowerPlantDto> powerplants)
         {
             Load = load;
             Fuels = fuels;
-            PowerPlants = powerPlants;
+            PowerPlants = powerplants;
         }
 
-        public int Load { get; set; }
+        public double Load { get; set; }
         public FuelCostDto Fuels { get; set; }
         public List<PowerPlantDto> PowerPlants { get; set; }
     }
