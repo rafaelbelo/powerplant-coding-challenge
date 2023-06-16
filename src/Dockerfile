@@ -6,10 +6,10 @@ EXPOSE 80
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
-COPY ["PowerCalculator/PowerCalculator.csproj", "PowerCalculator/"]
+COPY ["src/PowerCalculator.csproj", "PowerCalculator/"]
 RUN dotnet restore "PowerCalculator/PowerCalculator.csproj"
-COPY . .
 WORKDIR "/src/PowerCalculator"
+COPY . .
 RUN dotnet build "PowerCalculator.csproj" -c Release -o /app/build
 
 FROM build AS publish
