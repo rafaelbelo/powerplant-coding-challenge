@@ -5,7 +5,7 @@ VisualStudioVersion = 17.0.31919.166
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PowerCalculator", "src\PowerCalculator.csproj", "{6B77B51A-1B55-457B-9E2A-96B1A01E1A3E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PowerCalculatorTests", "PowerCalculatorTests\PowerCalculatorTests.csproj", "{3F046C20-7051-4193-A37E-35F66618805D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PowerCalculatorTests", "PowerCalculatorTests\PowerCalculatorTests.csproj", "{3F046C20-7051-4193-A37E-35F66618805D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

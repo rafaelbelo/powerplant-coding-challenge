@@ -32,30 +32,33 @@ namespace PowerCalculator.Domain.Models
         public double MwhAbleToGenerate { get; private set; }
         public double MwhToGenerateForPlan { get; private set; }
 
-        public double GetMwhThatCanBeSubtracted() => MwhToGenerateForPlan - Pmin;
-        public double AddMwhToGenerateForPlan(double mhwToAdd)
+        public double AddMwhToGenerateForPlan(double mwhToAdd)
         {
-            MwhToGenerateForPlan += mhwToAdd;
+            MwhToGenerateForPlan += mwhToAdd;
             if (MwhToGenerateForPlan > MwhAbleToGenerate)
             {
                 var surplus = MwhToGenerateForPlan - MwhAbleToGenerate;
                 MwhToGenerateForPlan = MwhAbleToGenerate;
                 return surplus;
             }
-            return 0d; ;
+            return 0d;
         }
 
-        public (double subtracted, double excess) SubtractMwhToGenerateForPlan(double mhwToSubtract)
+        public (double subtracted, double excess) SubtractMwhToGenerateForPlan(double mwhToSubtract)
         {
-            MwhToGenerateForPlan -= mhwToSubtract;
+            MwhToGenerateForPlan -= mwhToSubtract;
+            if (MwhToGenerateForPlan < 0d)
+            {
+                return (0d, mwhToSubtract);
+            }
             if (MwhToGenerateForPlan < Pmin)
             {
                 var excess = Pmin - MwhToGenerateForPlan;
-                var subtracted = mhwToSubtract - excess;
+                var subtracted = mwhToSubtract - excess;
                 MwhToGenerateForPlan = Pmin;
                 return (subtracted, excess);
             }
-            return (mhwToSubtract, 0d);
+            return (mwhToSubtract, 0d);
         }
 
         // Relation to the merit order: the lower the cost, the higher priority

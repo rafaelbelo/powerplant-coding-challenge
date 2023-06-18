@@ -31,8 +31,6 @@ namespace PowerCalculator.Domain.Services
                 surplusLoad = plantList[i].AddMwhToGenerateForPlan(surplusLoad);
             }
             return plantList;
-            //return (plantList.Where(p => p.MwhAbleToGenerate > 0d).OrderBy(p => p.CostPerMwh)
-            //    .Concat(plantList.Where(p => p.MwhAbleToGenerate == 0d).OrderBy(p => p.CostPerMwh))).ToList();
         }
 
         private List<PowerPlant> CreatePowerPlantDomainListOrderedByCost(ProductionPlanDto plan)
